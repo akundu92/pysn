@@ -179,6 +179,10 @@ class ParamsBuilder(object):
 
         self._sysparms['sysparm_suppress_pagination_header'] = suppress
 
+    def aggregate_api_as_dict(self):
+        raise  NotImplementedError
+
+
     def as_dict(self):
         """Constructs query params compatible with :class:`requests.Request`
 
@@ -190,3 +194,137 @@ class ParamsBuilder(object):
         sysparms.update(self._custom_params)
 
         return sysparms
+
+
+class ParamsBuilderAggregate():
+    def __init__(self):
+       self.pb = ParamsBuilder()
+       # self.pb._custom_params={}
+       self.pb._sysparms = {
+           'sysparm_query': '',
+           'sysparm_avg_fields':None,
+           'sysparm_count':False,
+           'sysparm_min_fields':None,
+           'sysparm_max_fields':None,
+           'sysparm_sum_fields':None,
+           'sysparm_group_by':None,
+           'sysparm_order_by':None,
+           'sysparm_having':None,
+           'sysparm_display_value':False,
+           'sysparm_query_category':None,
+       }
+
+    def add_custom(self, params):
+        self.pb.add_custom(params)
+
+
+
+    @property
+    def query(self):
+        """Maps to `sysparm_query`"""
+        return self.pb.query
+
+    @property
+    def avg_fields(self):
+        return self.pb._sysparms['sysparm_avg_fields']
+
+    @avg_fields.setter
+    def avg_fields(self,avg_fields):
+        self.pb._sysparms['sysparm_avg_fields']=avg_fields
+
+
+    @property
+    def count(self):
+        return self.pb._sysparms['sysparm_count']
+
+    @count.setter
+    def count(self,setter):
+        self.pb._sysparms['sysparm_count']=setter
+
+    @property
+    def min_fields(self):
+        return self.pb._sysparms['sysparm_min_fields']
+
+    @min_fields.setter
+    def min_fields(self,min_fields):
+        self.pb._sysparms['sysparm_min_fields']=min_fields
+
+    @property
+    def max_fields(self):
+        return self.pb._sysparms['sysparm_max_fields']
+
+    @max_fields.setter
+    def max_fields(self,max_fields):
+        self.pb._sysparms['sysparm_max_fields']=max_fields
+
+    @property
+    def sum_fields(self):
+        return self.pb._sysparms['sysparm_sum_fields']
+
+    @sum_fields.setter
+    def sum_fields(self,sum_fields):
+        self.pb._sysparms['sysparm_sum_fields']=sum_fields
+
+    @property
+    def group_by(self):
+        return self.pb._sysparms['sysparm_group_by']
+
+    @group_by.setter
+    def group_by(self,group_by):
+        self.pb._sysparms['sysparm_group_by']=group_by
+
+    @property
+    def order_by(self):
+        return self.pb._sysparms['sysparm_order_by']
+
+    @order_by.setter
+    def order_by(self,order_by):
+        self.pb._sysparms['sysparm_order_by']=order_by
+
+    @property
+    def having(self):
+        return self.pb._sysparms['sysparm_having']
+
+    @having.setter
+    def having(self,having):
+        self.pb._sysparms['sysparm_having']=having
+
+    @property
+    def display_values(self):
+        return self.pb._sysparms['sysparm_display_value']
+
+    @display_values.setter
+    def display_values(self,display_values):
+        self.pb._sysparms['sysparm_display_value']=display_values
+
+    @property
+    def query_category(self):
+        return self.pb._sysparms['sysparm_query_category']
+
+    @query_category.setter
+    def query_category(self,query_category):
+        self.pb._sysparms['sysparm_query_category']=query_category
+
+    @query.setter
+    def query(self, query):
+        """Validates, stringifies and sets `sysparm_query`
+
+        :param query: String, dict or QueryBuilder
+        """
+
+        self.pb._sysparms['sysparm_query'] = ParamsBuilder.stringify_query(query)
+
+
+
+
+    def as_dict(self):
+
+        return self.pb.as_dict()
+
+
+
+
+
+
+
+
